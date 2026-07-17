@@ -1,0 +1,24 @@
+import connectDB from "./db/index.js";
+import app from "./app.js";
+import dotenv from "dotenv";
+import APIError from "./utils/APIError.js";
+
+dotenv.config(
+    {
+        path: "./.env"
+    }
+);
+
+
+const PORT = process.env.PORT || 3000;
+
+connectDB()
+.then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+})
+.catch((err) => {
+    console.error("Can't connect to the server:", err.message);
+    process.exit(1);
+});
