@@ -5,7 +5,6 @@ import {accessCookieOptions, refreshCookieOptions} from "../utils/cookieOptions.
 
 
 const verifyJWT = async (req, res, next) => {
-    console.log("typeof next:", typeof next);
     const accessToken = req.cookies?.accessToken;
     const refreshToken = req.cookies?.refreshToken;
 

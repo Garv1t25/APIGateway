@@ -4,6 +4,7 @@ import { loginUser } from "../controllers/loginUser.js";
 import verifyJWT from "../middleware/verifyjwt.js";
 import { logoutUser } from "../controllers/logoutUser.js";
 import { getProfile } from "../controllers/getProfile.js";
+import { changePass } from "../controllers/changePass.js";
 
 
 const router = Router();
@@ -12,7 +13,7 @@ router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
 
 router.use(verifyJWT)
-
+router.route("/profile/password").put(changePass);
 router.route("/profile").get(getProfile);
 router.route("/logout").post(logoutUser);
 
