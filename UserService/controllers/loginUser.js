@@ -2,7 +2,7 @@ import User from '../models/user.model.js';
 import { accessCookieOptions, refreshCookieOptions } from '../utils/cookieOptions.js';
 
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res,next) => {
     try {
         const { email, password } = req.body;
 
@@ -47,6 +47,7 @@ const loginUser = async (req, res) => {
         });
 
     } catch (error) {
+        console.error('Error during login:', error);
         return res.status(500).json({
             success: false,
             message: error.message,

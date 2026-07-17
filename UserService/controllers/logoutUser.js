@@ -3,15 +3,24 @@ import User from "../models/user.model.js";
 import {accessCookieOptions, refreshCookieOptions} from "../utils/cookieOptions.js";
 
 const logoutUser = async (req, res) => {
-    const id = req.user._id;
-    await User.findByIdAndUpdate(id,{refreshToken: null});
-    res.cookie("accessToken", null);
-    res.cookie("refreshToken", null);
+    try{
+        const id = req.user._id;
+        await User.findByIdAndUpdate(id,{refreshToken: null});
+        res.clearCookie("accessToken", accessCookieOptions);
+        res.clearCookie("refreshToken", refreshCookieOptions);
 
-    res.send({
-        message : "request recieved",
-        cookies: req.cookies
-    })
+        res.send({
+            message : "User Logged Out"
+        })
+    }catch(err){
+        console.log(err);
+        res.send({
+            message : "Something went wrong while logging out"
+            
+        })
+    }
+
+    
 }
 
 export {logoutUser}

@@ -1,9 +1,11 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+
 import {accessCookieOptions, refreshCookieOptions} from "../utils/cookieOptions.js";
 
+
 const verifyJWT = async (req, res, next) => {
-    console.log("verifyJWT middleware executed");
+    console.log("typeof next:", typeof next);
     const accessToken = req.cookies?.accessToken;
     const refreshToken = req.cookies?.refreshToken;
 
@@ -86,7 +88,7 @@ const verifyJWT = async (req, res, next) => {
             username: user.username
         }
 
-        return next();
+        return next()
 
     } catch (error) {
         console.error(error);
