@@ -34,8 +34,8 @@ const loginUser = async (req, res,next) => {
         const accessToken = user.generateAccessToken();
         const refreshToken = user.generateRefreshToken();
 
-        user.refreshToken = refreshToken;
-        await user.save();
+        await User.findByIdAndUpdate(user._id, { refreshToken });
+
 
         return res
         .status(200)

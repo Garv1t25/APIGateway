@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
+import User from "../models/user.model.js";   
+import { accessCookieOptions, refreshCookieOptions } from "../utils/cookieOptions.js";
 
-import {accessCookieOptions, refreshCookieOptions} from "../utils/cookieOptions.js";
 
 
 const verifyJWT = async (req, res, next) => {
@@ -13,7 +13,7 @@ const verifyJWT = async (req, res, next) => {
             message: "Please login first"
         });
     }
-    
+
     if (accessToken) {
         try {
             const decoded = jwt.verify(
@@ -23,19 +23,21 @@ const verifyJWT = async (req, res, next) => {
 
             req.user = decoded;
             return next();
-        
+
         } catch (error) {
 
-            
-            if (error.name !== "TokenExpiredError") {
-                console.error(error);
 
+            if (error.name !== "TokenExpiredError") {
+
+                
+                console.log(error);
                 return res.status(401).json({
-                    message: "Please login again."
+                    message: "Unauthorized"
                 });
+                
             }
 
-            
+
         }
     }
 
@@ -60,19 +62,20 @@ const verifyJWT = async (req, res, next) => {
             });
         }
 
-        
+
         if (user.refreshToken !== refreshToken) {
             return res.status(401).json({
                 message: "Invalid refresh token, please login again"
-                
+
             });
         }
 
-        
+
         const newAccessToken = user.generateAccessToken();
         const newRefreshToken = user.generateRefreshToken();
-        user.refreshToken = newRefreshToken;
-        await user.save({validateBeforeSave: false});
+
+        await User.findByIdAndUpdate(user._id, { refreshToken: newRefreshToken });
+
 
         res.cookie("accessToken", newAccessToken, accessCookieOptions);
 
@@ -80,7 +83,7 @@ const verifyJWT = async (req, res, next) => {
 
         // console.log("new token generated")
 
-        
+
         req.user = {
             _id: user._id,
             email: user.email,
@@ -95,6 +98,7 @@ const verifyJWT = async (req, res, next) => {
         return res.status(401).json({
             message: "Please login again."
         });
+
     }
 };
 

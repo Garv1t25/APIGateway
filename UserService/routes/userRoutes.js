@@ -5,7 +5,7 @@ import verifyJWT from "../middleware/verifyjwt.js";
 import { logoutUser } from "../controllers/logoutUser.js";
 import { getProfile } from "../controllers/getProfile.js";
 import { changePass } from "../controllers/changePass.js";
-
+import { updateProfile } from "../controllers/updateProfile.js";
 
 const router = Router();
 
@@ -14,7 +14,7 @@ router.route("/login").post(loginUser);
 
 router.use(verifyJWT)
 router.route("/profile/password").put(changePass);
-router.route("/profile").get(getProfile);
+router.route("/profile").get(getProfile).put(updateProfile);
 router.route("/logout").post(logoutUser);
 
 export default router;
